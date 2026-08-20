@@ -193,67 +193,6 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:var(--white);ov
 .step-block h3{font-size:0.95rem;font-weight:600;color:var(--navy);margin-bottom:10px}
 .step-block p{font-size:0.86rem;color:var(--muted);line-height:1.72}
 
-/* AUDIO SECTION */
-.audio-section{background:var(--white);border-top:1px solid var(--border)}
-.audio-intro{margin-bottom:40px}
-.audio-intro .section-sub{margin-top:10px}
-.audio-cards{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-@media(max-width:640px){.audio-cards{grid-template-columns:1fr}}
-.audio-card{
-  border:1px solid var(--border);border-radius:4px;
-  overflow:hidden;background:var(--white);
-  transition:box-shadow 0.2s;
-}
-.audio-card:hover{box-shadow:0 6px 24px rgba(27,46,75,0.09)}
-.audio-card-header{
-  background:var(--navy);
-  padding:20px 24px 16px;
-  display:flex;align-items:flex-start;gap:14px;
-}
-.audio-location-icon{
-  width:36px;height:36px;min-width:36px;
-  background:rgba(122,180,216,0.15);
-  border-radius:3px;display:flex;align-items:center;justify-content:center;
-  margin-top:2px;
-}
-.audio-location-icon svg{width:17px;height:17px;stroke:#7ab4d8;fill:none;stroke-width:1.8}
-.audio-card-title{font-family:'Source Serif 4',serif;font-size:1rem;font-weight:600;color:white;margin-bottom:3px;line-height:1.3}
-.audio-card-loc{font-size:0.7rem;color:rgba(255,255,255,0.42);letter-spacing:0.09em;text-transform:uppercase}
-.audio-card-body{padding:20px 24px 24px}
-.audio-card-desc{font-size:0.84rem;color:var(--muted);line-height:1.68;margin-bottom:18px}
-.audio-player{display:flex;flex-direction:column;gap:10px}
-.audio-controls{display:flex;align-items:center;gap:14px}
-.play-btn{
-  width:38px;height:38px;min-width:38px;border-radius:50%;
-  background:var(--navy);border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:background 0.2s,transform 0.15s;flex-shrink:0;
-}
-.play-btn:hover{background:var(--blue);transform:scale(1.05)}
-.play-btn svg{width:13px;height:13px;fill:white}
-.play-btn svg.icon-play{margin-left:2px}
-.play-btn.playing svg.icon-play{display:none}
-.play-btn.playing svg.icon-pause{display:block}
-.play-btn svg.icon-pause{display:none}
-.audio-progress-wrap{flex:1;cursor:pointer;padding:8px 0}
-.audio-progress-track{
-  height:3px;background:var(--border);border-radius:2px;
-  position:relative;transition:height 0.15s;
-}
-.audio-progress-wrap:hover .audio-progress-track{height:4px}
-.audio-progress-fill{height:100%;background:var(--blue);border-radius:2px;width:0%;pointer-events:none;position:relative}
-.audio-progress-fill::after{
-  content:'';width:11px;height:11px;border-radius:50%;
-  background:var(--navy);border:2px solid var(--blue);
-  position:absolute;right:-5px;top:50%;transform:translateY(-50%);
-  opacity:0;transition:opacity 0.15s;
-}
-.audio-progress-wrap:hover .audio-progress-fill::after{opacity:1}
-.audio-time{
-  font-size:0.71rem;color:var(--muted);letter-spacing:0.04em;
-  white-space:nowrap;font-variant-numeric:tabular-nums;min-width:76px;text-align:right;
-}
-
 /* HARDWARE */
 .hardware-section{background:var(--white);border-top:1px solid var(--border)}
 .hw-intro{margin-bottom:40px}
@@ -510,24 +449,27 @@ footer{
   </div>
 </section>
 
-<!-- AUDIO DEMOS -->
+<!-- AUDIO DEMO -->
 <section class="section audio-section" id="listen">
   <div class="section-inner">
+
     <div class="audio-intro r">
       <span class="label-tag">Audio Demo</span>
       <h2 class="section-heading">Hear Chatterbox in Action</h2>
-      <p class="section-sub">Audio matched to your graphics provides a powerful Point-of-Sale display tool.
-      Simply switch it on and let your product do the talking.</p>
+
+      <p class="section-sub">
+        Audio matched to your graphics provides a powerful Point-of-Sale display tool.
+        Simply switch it on and let your product do the talking.
+      </p>
     </div>
-    <div class="audio-player" data-src="audio/chatterbox audio.mp3">
-            <audio controls preload="none">
-  <source src="audio/chatterbox audio.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
-          </div>
-        </div>
-      </div>
-  </section>
+
+    <audio controls preload="none" style="width:100%;max-width:700px;">
+      audio/chatterbox audio.mp3
+      Your browser does not support the audio element.
+    </audio>
+
+  </div>
+</section>
           
 <!-- HARDWARE -->
 <section class="section hardware-section" id="hardware">
@@ -684,59 +626,6 @@ if(heroBg && !reduce){
     heroBg.style.transform='translateY('+(window.scrollY*0.16)+'px)';
   },{passive:true});
   
-// Audio players
-function fmt(s){
-  if(isNaN(s)||!isFinite(s)) return '0:00';
-  const m=Math.floor(s/60),sec=Math.floor(s%60);
-  return m+':'+(sec<10?'0':'')+sec;
-}
-const allAudio=[];
-document.querySelectorAll('.audio-player').forEach(player=>{
-  const audio=new Audio(player.dataset.src);
-  allAudio.push(audio);
-  const btn=player.querySelector('.play-btn');
-  const fill=player.querySelector('.audio-progress-fill');
-  const timeEl=player.querySelector('.audio-time');
-  const track=player.querySelector('.audio-progress-track');
-  const wrap=player.querySelector('.audio-progress-wrap');
-
-  audio.addEventListener('loadedmetadata',()=>{
-    timeEl.textContent='0:00 / '+fmt(audio.duration);
-  });
-
-  btn.addEventListener('click',()=>{
-    // Stop all others
-    allAudio.forEach(a=>{
-      if(a!==audio){a.pause();a.currentTime=0;}
-    });
-    document.querySelectorAll('.play-btn').forEach(b=>{
-      if(b!==btn) b.classList.remove('playing');
-    });
-    if(audio.paused){audio.play();btn.classList.add('playing');}
-    else{audio.pause();btn.classList.remove('playing');}
-  });
-
-  audio.addEventListener('timeupdate',()=>{
-    if(audio.duration){
-      const pct=(audio.currentTime/audio.duration)*100;
-      fill.style.width=pct+'%';
-      timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
-    }
-  });
-
-  audio.addEventListener('ended',()=>{
-    btn.classList.remove('playing');
-    fill.style.width='0%';
-    audio.currentTime=0;
-    timeEl.textContent='0:00 / '+fmt(audio.duration);
-  });
-
-  wrap.addEventListener('click',e=>{
-    if(!audio.duration) return;
-    const rect=track.getBoundingClientRect();
-    const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-    audio.currentTime=pct*audio.duration;
-  });
 }
 </script>
 </body>
