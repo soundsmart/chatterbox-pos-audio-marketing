@@ -527,30 +527,8 @@ footer{
           </div>
         </div>
       </div>
-  
-<!-- AUDIO DEMO -->
-<section class="section audio-section">
-  <div class="section-inner">
-
-    <span class="label-tag">Audio Demo</span>
-
-    <h2 class="section-heading">
-      Hear Chatterbox in Action
-    </h2>
-
-    <p class="section-sub" style="max-width:700px;margin-bottom:30px;">
-      Audio matched to your graphics provides a powerful Point-of-Sale display tool.
-      Simply switch it on and let your product do the talking.
-    </p>
-
-    <audio controls preload="metadata" style="width:100%;max-width:600px;">
-      chatterbox%20audio.mp3
-      Your browser does not support the audio element.
-    </audio>
-
-  </div>
-</section>
-        
+  </section>
+          
 <!-- HARDWARE -->
 <section class="section hardware-section" id="hardware">
   <div class="section-inner">
@@ -705,7 +683,8 @@ if(heroBg && !reduce){
   window.addEventListener('scroll',()=>{
     heroBg.style.transform='translateY('+(window.scrollY*0.16)+'px)';
   },{passive:true});
-  // Audio players
+  
+// Audio players
 function fmt(s){
   if(isNaN(s)||!isFinite(s)) return '0:00';
   const m=Math.floor(s/60),sec=Math.floor(s%60);
@@ -758,7 +737,7 @@ document.querySelectorAll('.audio-player').forEach(player=>{
     const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
     audio.currentTime=pct*audio.duration;
   });
-});
+}
 </script>
 </body>
 </html>
